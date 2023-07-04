@@ -160,4 +160,5 @@ cython_debug/
 .idea/
 
 # Project data files
+.DS_Store
 lakehouse/data
