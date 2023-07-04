@@ -6,26 +6,26 @@
 ################################################################################################
 
 ## make data directory and collect data groups
-#rootdatafol=/tmp/applewatchdata
-#if [[ ! -d "$rootdatafol" ]]
-#then
-#  mkdir "$rootdatafol"
-#else
-#  echo "root data folder exists ..."
-#fi
-#
-#datagroups=(group1 group2 group3)
-#
-## iterate through data groups and download, extract data to a temp folder and copy to the data folder
-#for group in "${datagroups[@]}"; do
-#  file_path="https://casas.wsu.edu/datasets/smartwatch/$group.zip"
-#  echo "downloading $file_path..."
-#  curl -L "$file_path" -o "$rootdatafol/$group.zip"
-#
-#  unzip "$rootdatafol/$group.zip" -d "$rootdatafol/$group"
-#  cp -r "$rootdatafol/$group/" ./data
-#
-#done
+rootdatafol=/tmp/applewatchdata
+if [[ ! -d "$rootdatafol" ]]
+then
+  mkdir "$rootdatafol"
+else
+  echo "root data folder exists ..."
+fi
+
+datagroups=(group1 group2 group3)
+
+# iterate through data groups and download, extract data to a temp folder and copy to the data folder
+for group in "${datagroups[@]}"; do
+  file_path="https://casas.wsu.edu/datasets/smartwatch/$group.zip"
+  echo "downloading $file_path..."
+  curl -L "$file_path" -o "$rootdatafol/$group.zip"
+
+  unzip "$rootdatafol/$group.zip" -d "$rootdatafol/$group"
+  cp -r "$rootdatafol/$group/" ./data
+
+done
 
 ## sync apple watch data to s3
 aws s3 sync ./data/ s3://apple-watch-activity-data/staging/
