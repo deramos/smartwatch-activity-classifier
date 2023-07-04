@@ -10,8 +10,11 @@ RUN yum install -y sudo git \
 COPY ./spark/spark-defaults.conf /usr/lib/spark/conf/spark-defaults.conf
 COPY ./spark/log4j.properties /usr/lib/spark/conf/log4j.properties
 
+# set working directory to hadoop home
+WORKDIR /home/hadoop
+
 ## copy and install python requirements.txt
-COPY ./pkgs /tmp/pkgs
-RUN pip3 install -r /tmp/pkgs/requirements.txt
+COPY requirements.txt .
+RUN pip3 install -r requirements.txt
 
 USER hadoop:hadoop

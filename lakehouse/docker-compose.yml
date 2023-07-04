@@ -1,0 +1,40 @@
+version: "3.5"
+
+services:
+  spark:
+    build:
+      context: .
+    container_name: spark
+    command: /bin/bash -c "while sleep 1000; do :; done"
+    networks:
+      - spark
+    volumes:
+      - $PWD:/home/hadoop/lakehouse
+      - $HOME/.aws:/home/hadoop/.aws
+
+  kafka:
+    image: bitnami/kafka:3.4.1
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    networks:
+      - spark
+    environment:
+      - ALLOW_PLAINTEXT_LISTENER=yes
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui
+    container_name: kafka-ui
+    ports:
+      - "8080:8080"
+    networks:
+      - spark
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+    depends_on:
+      - kafka
+
+networks:
+  spark:
+    name: spark
