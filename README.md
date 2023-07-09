@@ -1,5 +1,5 @@
-# Smartwatch AWS Lakehouse
-Lakehouse for staging, modeling, classifying, and generating new Apple SmartWatch Data. We will use AWS S3, AWS EMR, 
+# Smartwatch Activity Classifier
+Module for staging, modeling, classifying, and generating new Apple SmartWatch Data. We will use AWS S3, AWS EMR, 
 Kafka, Apache Spark, and Databricks Datagen.
 
 ## Data Loading
