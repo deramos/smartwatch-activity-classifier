@@ -36,3 +36,7 @@ picks up the data in the topics and makes predictions. The samples with low pred
 that will be used to retrain the model at a later date. 
 
 ![](images/generate-new-data.png)
+
+---
+<br>
+&copy @deramos 
