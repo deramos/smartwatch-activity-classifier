@@ -5,7 +5,7 @@ services:
     build:
       context: .
     container_name: spark
-    command: /bin/bash -c "while sleep 1000; do :; done"
+    # command: /bin/bash -c "while sleep 1000; do :; done"
     networks:
       - spark
     volumes:

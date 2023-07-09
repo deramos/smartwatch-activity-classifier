@@ -30,4 +30,8 @@ done
 ## sync apple watch data to s3
 aws s3 sync ./data/ s3://apple-watch-activity-data/staging/
 
-## submit spark job to emr
+## build emr docker image and start it using docker compose
+docker compose build
+
+## ssh into `lakehouse-spark` container and submit the spark-job file
+docker exec lakehouse-spark ./submit_emr_job
