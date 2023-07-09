@@ -7,9 +7,9 @@ services:
     container_name: spark
     # command: /bin/bash -c "while sleep 1000; do :; done"
     networks:
-      - spark
+      - app_network
     volumes:
-      - $PWD:/home/hadoop/lakehouse
+      - $PWD:/home/hadoop/activitymodule
       - $HOME/.aws:/home/hadoop/.aws
 
   kafka:
@@ -18,7 +18,7 @@ services:
     ports:
       - "9092:9092"
     networks:
-      - spark
+      - app_network
     environment:
       - ALLOW_PLAINTEXT_LISTENER=yes
 
@@ -28,7 +28,7 @@ services:
     ports:
       - "8080:8080"
     networks:
-      - spark
+      - app_network
     environment:
       KAFKA_CLUSTERS_0_NAME: local
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
@@ -36,5 +36,5 @@ services:
       - kafka
 
 networks:
-  spark:
-    name: spark
+  app_network:
+    name: app_network

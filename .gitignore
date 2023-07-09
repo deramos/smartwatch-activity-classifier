@@ -161,4 +161,5 @@ cython_debug/
 
 # Project data files
 .DS_Store
-lakehouse/data
+activitymodule/data
+

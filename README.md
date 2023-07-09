@@ -14,7 +14,7 @@ and load them into a glue table.
 
 ## Model Training
 The cleaned up data is used to train a Classifier to predict the recorded activity using the watch raw
-data. The notebook to perform this can be found here [Activity Classifier](lakehouse/spark/notebooks/Train%20Activity%20Classifier.ipynb)
+data. The notebook to perform this can be found here [Activity Classifier](activitymodule/spark/notebooks/Train%20Activity%20Classifier.ipynb)
 
 The trained model will be used to predict the activity of new samples streamed from a kafka topic using spark streaming
 later in the application. 
