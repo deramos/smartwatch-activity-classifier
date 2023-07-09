@@ -28,10 +28,34 @@ if __name__ == "__main__":
         .appName("staging-to-processed")\
         .getOrCreate()
 
+    # define data schema
+    schema = StructType([
+        StructField("stamp", TimestampType(), nullable=True),
+        StructField("yaw", FloatType(), nullable=True),
+        StructField("pitch", FloatType(), nullable=True),
+        StructField("roll", FloatType(), nullable=True),
+        StructField("rotation_rate_x", FloatType(), nullable=True),
+        StructField("rotation_rate_y", FloatType(), nullable=True),
+        StructField("rotation_rate_z", FloatType(), nullable=True),
+        StructField("user_acceleration_x", FloatType(), nullable=True),
+        StructField("user_acceleration_y", FloatType(), nullable=True),
+        StructField("user_acceleration_z", FloatType(), nullable=True),
+        StructField("location_type", StringType(), nullable=True),
+        StructField("latitude_distance_from_mean", FloatType(), nullable=True),
+        StructField("longitude_distance_from_mean", FloatType(), nullable=True),
+        StructField("altitude_distance_from_mean", FloatType(), nullable=True),
+        StructField("course", FloatType(), nullable=True),
+        StructField("speed", FloatType(), nullable=True),
+        StructField("horizontal_accuracy", FloatType(), nullable=True),
+        StructField("vertical_accuracy", FloatType(), nullable=True),
+        StructField("battery_state", StringType(), nullable=True),
+        StructField("user_activity_label", StringType(), nullable=True),
+    ])
+
     # read raw data from s3
     watch_data = spark.read\
-        .option("inferSchema", 'true')\
-        .csv(f"{BUCKET_NAME}/{SOURCE_DIR}", header=True)
+        .option("mode", "DROPMALFORMED")\
+        .csv(f"{BUCKET_NAME}/{SOURCE_DIR}", header=True, schema=schema)
 
     logging.info("No of samples before clean up ", watch_data.count())
 
