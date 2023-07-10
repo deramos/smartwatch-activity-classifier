@@ -37,6 +37,10 @@ that will be used to retrain the model at a later date.
 
 ![](images/generate-new-data.png)
 
+## TO RUN
+---
+To run, clone the project. Run the `fetch_data.sh` to fetch data from WSU and sync it to S3.
+
 ---
 <br>
 &copy @deramos 

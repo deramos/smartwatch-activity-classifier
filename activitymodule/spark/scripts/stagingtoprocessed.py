@@ -17,16 +17,20 @@ from pyspark.sql.types import (
     TimestampType
 )
 
-BUCKET_NAME = 's3://apple-watch-activity-data'
-SOURCE_DIR = 'staging'
-DEST_PATH = 'processed'
-DB_NAME = 'watchdata'
-TABLE_NAME = 'activitydata'
+BUCKET_NAME = os.getenv('BUCKET')
+SOURCE_DIR = os.getenv('STAGING_PATH')
+DEST_PATH = os.getenv('PROCESSED_PATH')
+DB_NAME = os.getenv('DB_NAME')
+TABLE_NAME = os.getenv('TABLE_NAME')
 
 if __name__ == "__main__":
     spark = SparkSession.builder\
         .appName("staging-to-processed")\
         .getOrCreate()
+
+    # set spark configs
+    spark.conf.set('spark.sql.adaptive.enabled', True)
+    spark.conf.set('spark.sql.adaptive.skewJoin.enabled', True)
 
     # define data schema
     schema = StructType([

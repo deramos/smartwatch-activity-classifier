@@ -161,5 +161,6 @@ cython_debug/
 
 # Project data files
 .DS_Store
+../.DS_Store
 activitymodule/data
 
