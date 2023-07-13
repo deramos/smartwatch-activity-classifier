@@ -7,21 +7,21 @@
 
 import os
 import logging
+
 from pyspark.sql import SparkSession
 from pyspark.sql.types import (
     StructType,
     StructField,
     FloatType,
-    IntegerType,
     StringType,
     TimestampType
 )
 
-BUCKET_NAME = os.getenv('BUCKET')
-SOURCE_DIR = os.getenv('STAGING_PATH')
-DEST_PATH = os.getenv('PROCESSED_PATH')
-DB_NAME = os.getenv('DB_NAME')
-TABLE_NAME = os.getenv('TABLE_NAME')
+BUCKET_NAME = os.getenv('BUCKET', 's3://apple-watch-activity-data')
+SOURCE_DIR = os.getenv('STAGING_PATH', 'staging')
+DEST_PATH = os.getenv('PROCESSED_PATH', 'processed')
+DB_NAME = os.getenv('DB_NAME', 'watchdata')
+TABLE_NAME = os.getenv('TABLE_NAME', 'activitydata')
 
 if __name__ == "__main__":
     spark = SparkSession.builder\

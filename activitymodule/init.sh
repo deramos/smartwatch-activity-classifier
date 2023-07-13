@@ -29,6 +29,7 @@ done
 
 ## sync apple watch data to s3
 aws s3 sync ./data/ s3://apple-watch-activity-data/staging/
+aws s3 sync ./spark/ s3://apple-watch-activity-data/code/
 
 ## build emr docker image and start it using docker compose
 docker compose build
