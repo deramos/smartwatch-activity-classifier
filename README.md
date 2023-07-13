@@ -39,13 +39,20 @@ that will be used to retrain the model at a later date.
 
 ## TO RUN
 To run, clone the project. Run the `fetch_data.sh` to fetch data from WSU and sync it to S3. Use `docker compose build`
-to build the project. 
+to build the project.
+
+Run `submit-emr-job.sh` to submit the EMR which creates an EMR cluster (if it doesn't exists), and submits the spark job using 
+to clean up the watch data in S3.
+
+```
+bash submit-emr-job.sh
+```
 
 Start the project using `docker compose up` and exec into the `activitymodule_spark` container to submit the spark jobs
 
 ```
 docker exec -it activitymodule_spark /bin/bash
-/usr/local/spark/bin/spark-submit /home/hadoop/spark/scripts/stagingtoprocessed.py
+/usr/lib/spark/bin/spark-submit /home/hadoop/spark/scripts/stagingtoprocessed.py
 ```
 This job cleans up data from the staging directory on S3 and moves it to a redshift table (and a Glue catalog). Using 
 jupyter, run the notebook to train a spark model to predict activity using watch features. The model artifacts and params
