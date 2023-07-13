@@ -163,4 +163,5 @@ cython_debug/
 .DS_Store
 ../.DS_Store
 activitymodule/data
+activitymodule/*/.ipynb_checkpoints
 
