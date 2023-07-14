@@ -3,7 +3,7 @@ Module for staging, modeling, classifying, and generating new Apple SmartWatch D
 Kafka, Apache Spark, and Databricks Datagen.
 
 ## Data Loading
-The first stage of the application is to load bulk data from Washington State University (WSU)
+The first stage of the application is to load bulk data (~160GB) from Washington State University (WSU)
 Center of Advanced Studies in Adaptive Systems (CASAS) archives 
  [https://casas.wsu.edu/datasets/smartwatch/](https://casas.wsu.edu/datasets/smartwatch/) into
 a staging folder in an S3 bucket. We use a Spark job on EMR to clean the data (remove null values)
@@ -38,25 +38,33 @@ that will be used to retrain the model at a later date.
 ![](images/generate-new-data.png)
 
 ## TO RUN
-To run, clone the project. Run the `fetch_data.sh` to fetch data from WSU and sync it to S3. Use `docker compose build`
-to build the project.
+To run, clone the project. Run the `init.sh` to fetch data from WSU and sync it to S3. The script also copies spark scripts 
+from local directory to s3 bucket to be used later in EMR. It builds the project using `docker compose build`.
 
-Run `submit-emr-job.sh` to submit the EMR which creates an EMR cluster (if it doesn't exists), and submits the spark job using 
-to clean up the watch data in S3.
+Run `rundatapreprocess.py` to submit an EMR job which creates a cluster (if it doesn't exist), and cleans up the watch 
+data in S3. The cleaned data is saved into a Glue table and later migrated to a redshift table.
 
 ```
-bash submit-emr-job.sh
+python activitymodule/jobs/run-data-preprocess.py
 ```
+This job cleans up data from the staging directory on S3 and moves it to a redshift table (and a Glue catalog).
 
-Start the project using `docker compose up` and exec into the `activitymodule_spark` container to submit the spark jobs
+Run `train-activity-model.py` to  submit the EMR to train a RandomForestClassifier to predict watch activity using the 
+raw data.
+
+Start the project using `docker compose up` and exec into the `activitymodule_spark` container to submit the spark
+streaming job, and the dbl datagen script
 
 ```
 docker exec -it activitymodule_spark /bin/bash
-/usr/lib/spark/bin/spark-submit /home/hadoop/spark/scripts/stagingtoprocessed.py
+/usr/lib/spark/bin/spark-submit /home/hadoop/spark/scripts/predict-activity.py
+/usr/lib/spark/bin/spark-submit /home/hadoop/spark/scripts/generate-new-data.py
 ```
-This job cleans up data from the staging directory on S3 and moves it to a redshift table (and a Glue catalog). Using 
-jupyter, run the notebook to train a spark model to predict activity using watch features. The model artifacts and params
-are saved on [MLflow](https://mlflow.org) 
+The `generate-new-data` script uses dblDataGen to generate new watch data that is of the same distribution as the previously
+loaded watch data. This statistics of the data is loaded from glue or redshift. The newly generated data is sent into a 
+kafka topic. 
+
+The `predict-activity` script reads data from kafka topic and predicts the activity associated with the data.
 
 ```commandline
 jupyter nbcovert --execute /home/hadoop/spark/notebooks/train-activity-classifier.ipynb
