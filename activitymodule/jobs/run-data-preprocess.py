@@ -64,7 +64,7 @@ def run_job_flow(_jobflow_role, _service_role, _job_steps):
 
 if __name__ == "__main__":
     bucket_name = 'apple-watch-activity-data'
-    script_name_path = 'code/scripts/stagingtoprocessed.py'
+    script_name_path = 'code/scripts/staging-to-processed.py'
 
     log_uri = f's3://{bucket_name}/logs'
 

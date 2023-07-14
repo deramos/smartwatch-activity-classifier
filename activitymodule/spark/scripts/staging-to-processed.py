@@ -61,12 +61,10 @@ if __name__ == "__main__":
         .option("mode", "DROPMALFORMED")\
         .csv(f"{BUCKET_NAME}/{SOURCE_DIR}", header=True, schema=schema)
 
-    logging.info("No of samples before clean up ", watch_data.count())
-
     # drop null values
-    watch_data_processed = watch_data.dropna(how="any")
+    watch_data_processed = watch_data.filter("user_activity_label is not null")  # watch_data.dropna(how="any")
 
-    logging.info("No of samples after clean up ", watch_data_processed.count())
+    logging.info(f"Percentage of clean samples {(watch_data_processed.count() / watch_data.count()) * 100}% ")
 
     # write data to s3
     watch_data_processed.write\
