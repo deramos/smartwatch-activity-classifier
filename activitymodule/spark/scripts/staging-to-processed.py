@@ -18,8 +18,8 @@ from pyspark.sql.types import (
 )
 
 BUCKET_NAME = os.getenv('BUCKET', 's3://apple-watch-activity-data')
-SOURCE_DIR = os.getenv('STAGING_PATH', 'data/staging')
-DEST_PATH = os.getenv('PROCESSED_PATH', 'processed')
+SOURCE_DIR = os.getenv('STAGING_PATH', 'data/staging/subset/')
+DEST_PATH = os.getenv('PROCESSED_PATH', 'data/processed')
 DB_NAME = os.getenv('DB_NAME', 'watchdata')
 TABLE_NAME = os.getenv('TABLE_NAME', 'activitydata')
 
@@ -64,7 +64,8 @@ if __name__ == "__main__":
     # drop null values
     watch_data_processed = watch_data.filter("user_activity_label is not null")  # watch_data.dropna(how="any")
 
-    logging.info(f"Percentage of clean samples {(watch_data_processed.count() / watch_data.count()) * 100}% ")
+    # percentage = (watch_data_processed.count() / watch_data.count()) * 100
+    # logging.info(f"Percentage of clean samples {percentage}% ")
 
     # write data to s3
     watch_data_processed.write\

@@ -15,7 +15,7 @@ def run_job_flow(_jobflow_role, _service_role, _job_steps):
     try:
         response = emr_client.run_job_flow(
             Name="Load data from staging to processed",
-            ReleaseLabel='emr-6.11.0',
+            ReleaseLabel='emr-6.0.0',
             LogUri=log_uri,
             Configurations=[
                 {
