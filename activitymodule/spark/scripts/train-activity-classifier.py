@@ -30,7 +30,7 @@ if __name__ == '__main__':
     # Create Spark Session
     spark = SparkSession \
         .builder \
-        .config('spark.jars.packages', 'org.apache.hadoop:hadoop-aws:3.2.0,org.apache.hadoop:hadoop-client:3.2.0') \
+        .config('spark.jars.packages', 'org.apache.hadoop:hadoop-aws:3.3.4,org.apache.hadoop:hadoop-client:3.3.4') \
         .config('spark.jars.packages', 'org.apache.spark:spark-hadoop-cloud_2.12:3.2.0') \
         .config('spark.hadoop.fs.s3.impl', 'org.apache.hadoop.fs.s3a.S3AFileSystem') \
         .config('spark.jars.excludes', 'com.google.guava:guava') \
@@ -40,6 +40,10 @@ if __name__ == '__main__':
     # Set AWS KEY
     spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3a.access.key", AWS_ACCESS_KEY)
     spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3a.secret.key", AWS_SECRET_KEY)
+
+    # set spark configs
+    spark.conf.set('spark.sql.adaptive.enabled', True)
+    spark.conf.set('spark.sql.adaptive.skewJoin.enabled', True)
 
     # define data schema
     schema = StructType([
@@ -71,10 +75,10 @@ if __name__ == '__main__':
         .option("mode", "DROPMALFORMED") \
         .parquet(f"{BUCKET_NAME}/{SOURCE_DIR}")
 
-    # Clean and Preprocess data
+    # fit and transform string data to string indexed data
     string_cols = ['location_type', 'battery_state']
     string_indexer = StringIndexer(inputCols=string_cols, outputCols=[s + '_indexed' for s in string_cols])
-
-    # fit and transform string data to string indexed data
     string_indexer_model = string_indexer.fit(data)
     data_indexed = string_indexer_model.transform(data)
+
+    # fit and transform to one-hot using string-indexed data
