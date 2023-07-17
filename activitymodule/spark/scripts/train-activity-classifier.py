@@ -18,11 +18,12 @@ BUCKET_NAME = os.getenv('BUCKET')
 SOURCE_DIR = os.getenv('PROCESSED_PATH')
 DB_NAME = os.getenv('DB_NAME')
 TABLE_NAME = os.getenv('TABLE_NAME')
-AWS_ACCESS_KEY = os.getenv('DB_NAME')
-AWS_SECRET_KEY = os.getenv('TABLE_NAME')
+AWS_ACCESS_KEY = os.getenv('AWS_ACCESS_KEY_ID')
+AWS_SECRET_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
 
 
 if __name__ == '__main__':
+
     os.environ['PYSPARK_SUBMIT_ARGS'] = '--packages: org.apache.spark:spark-hadoop-cloud_2.12:3.2.0'
     os.environ['PYSPARK_SUBMIT_ARGS'] = "--master local[*] pyspark-shell"
 
