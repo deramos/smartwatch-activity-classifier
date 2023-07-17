@@ -13,10 +13,10 @@ data into a `processed` folder on S3 and also into a glue table.
 
 
 ## Model Training
-The cleaned up data is used to train a Classifier to predict the recorded activity. The spark script to perform this 
-can be found here [Activity Classifier](activitymodule/spark/scripts/train-activity-classifier.py)
-The trained model will be used to predict the activity of new samples streamed from a kafka topic using spark streaming
-later in the application. 
+The cleaned up data is used to train a machine learning classifier that predicts the recorded activity. The spark 
+script that performs this can be found here [Activity Classifier](activitymodule/spark/scripts/train-activity-classifier.py)
+The trained model will be used to predict the activity of new generated samples streamed from a kafka topic using spark 
+streaming later in the application. 
 
 ### Active Learning
 To retrain the model with new samples, active learning technique is used. When new data samples are streamed from kafka 
