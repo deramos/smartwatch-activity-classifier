@@ -17,11 +17,11 @@ from pyspark.sql.types import (
     TimestampType
 )
 
-BUCKET_NAME = os.getenv('BUCKET')
-SOURCE_DIR = os.getenv('STAGING_PATH')
-DEST_PATH = os.getenv('PROCESSED_PATH')
-DB_NAME = os.getenv('DB_NAME')
-TABLE_NAME = os.getenv('TABLE_NAME')
+BUCKET_NAME = os.getenv('BUCKET', 's3://apple-watch-activity-data')
+SOURCE_DIR = os.getenv('STAGING_PATH', 'data/staging/subset/')
+DEST_PATH = os.getenv('PROCESSED_PATH', 'data/processed')
+DB_NAME = os.getenv('DB_NAME', 'watchdata')
+TABLE_NAME = os.getenv('TABLE_NAME', 'activitydata')
 
 
 if __name__ == "__main__":
@@ -74,9 +74,9 @@ if __name__ == "__main__":
         .parquet(f"{BUCKET_NAME}/{DEST_PATH}")
 
     # Create Glue Tables
-    watch_data_processed.registerTempTable(TABLE_NAME)
+    watch_data_processed.createOrReplaceTempView(TABLE_NAME)
 
-    spark.sql(f"CREATE DATABASE IF NOT EXIST {DB_NAME}")
+    spark.sql(f"CREATE DATABASE IF NOT EXISTS {DB_NAME}")
     spark.sql(f"""
         CREATE TABLE IF NOT EXISTS {TABLE_NAME}
         USING PARQUET
