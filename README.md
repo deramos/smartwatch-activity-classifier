@@ -77,6 +77,3 @@ View the kafka topics, spark scripts, and cluster performance using the followin
 
 
 ---
-<br>
-
-&copy; | [@deramos](https://github.com/deramos)
